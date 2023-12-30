@@ -43,19 +43,39 @@ int main(int argc, char **argv)
   if (rclcpp::spin_until_future_complete(nodeSend, result) ==
     rclcpp::FutureReturnCode::SUCCESS)
   {
-    std::string r = "";
+    std::string errorString = "";
     if (result.get()->success){
-      r = "Success";
+      errorString = "Success"; // if true then success
     }
     else
     {
-      r = "Error";
+      errorString = "Error";
     }
-    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Output: %s", r.c_str());
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Output: %s", errorString.c_str());
   } else {
     RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call service lora_service");   
   }
 
+  // trying to code the continuous receive here // not supposed to be continuous
+  /*
+  auto resultReceive = clientReceive->async_send_request();
+  // Wait for the result.
+  if (rclcpp::spin_until_future_complete(nodeReceive, resultReceive) ==
+    rclcpp::FutureReturnCode::SUCCESS)
+  {
+    std::string finalErrorStatment = "";
+    std::string finalErrorStatement = "Error Occurred"; 
+    if (resultReceive.get->error){
+        finalErrorStatement = "Success"; //if true then success
+  }
+    std::string receivedString = resultReceive.get()->received;
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Received String: [%s]", receivedString.c_str());
+    RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "Output: %s", finalErrorStatement.c_str());
+  } else {
+    RCLCPP_ERROR(rclcpp::get_logger("rclcpp"), "Failed to call service lora_service");   
+  }
+  */
+  
   rclcpp::shutdown();
   return 0;
 }
